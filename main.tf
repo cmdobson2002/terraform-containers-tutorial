@@ -15,6 +15,7 @@ terraform {
 # Configures specified provider (docker)
 # You can use multiple provider blocks to manage resources from different providers (AWS, Azure, etc.)
 provider "docker" {
+  # Try without this variable first -- if it can't connect to docker, include the path to your PERSONAL docker.sock (i.e. change the Users/charliedobson)
   host = "unix:///Users/charliedobson/.docker/run/docker.sock"
 }
 
