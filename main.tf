@@ -5,41 +5,39 @@
 # Version constraint is optional, terraform automatically downloads most recent version
 terraform {
   required_providers {
-    google = {
-      source  = "hashicorp/google"
+    docker = {
+      source  = "kreuzwerker/docker"
+      version = "~> 3.0.1"
     }
   }
 }
 
-resource "google_cloud_run_v2_service" "default" {
-  project = "vm-container-demo"
-  name     = "cloudrun-service"
-  location = "us-central1"
-  ingress = "INGRESS_TRAFFIC_ALL"
+# Configures specified provider (docker)
+# You can use multiple provider blocks to manage resources from different providers (AWS, Azure, etc.)
+provider "docker" {
+  # Try without this variable first -- if it can't connect to docker, include the path to your PERSONAL docker.sock (i.e. change the Users/charliedobson)
+  host = "unix:///Users/charliedobson/.docker/run/docker.sock"
+}
 
-
-  template {
-    containers {
-      image = "us-central1-docker.pkg.dev/vm-container-demo/vm-container-demo/demo-fastapi-image"
-    }
+resource "docker_image" "fastapi_image" {
+  name = "fastapi_image"
+  build {
+    context = "."
+    dockerfile = "Dockerfile"
   }
 }
 
-data "google_iam_policy" "noauth" {
-  binding {
-    role = "roles/run.invoker"
-    members = [
-      "allUsers",
-    ]
+# Resource blocks define infrastructure components, can be physical or virtual (docker container)
+# Requires two strings before the block: resource type ("docker_image"), and resource name ("nginx")
+# Used to create ID for docker image: docker_container.fastapi
+# Can take arguments such as machine sizes, disk image names
+resource "docker_container" "fastapi" {
+  image = docker_image.fastapi_image.image_id
+  name  = "fastapi_container"
+
+  # Docker configuration values
+  ports {
+    internal = 8000
+    external = 8000
   }
 }
-
-resource "google_cloud_run_service_iam_policy" "noauth" {
-  location    = google_cloud_run_v2_service.default.location
-  project     = google_cloud_run_v2_service.default.project
-  service     = google_cloud_run_v2_service.default.name
-
-  policy_data = data.google_iam_policy.noauth.policy_data
-}
-
-
