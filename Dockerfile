@@ -9,4 +9,4 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 # Copy our backend source code into the container
 COPY ./app /code/app
 # Start the server: --reload to continuously reload the server when changes occur
-CMD ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0"]
+CMD ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8080"]
