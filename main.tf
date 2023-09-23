@@ -19,25 +19,25 @@ provider "docker" {
   host = "unix:///Users/charliedobson/.docker/run/docker.sock"
 }
 
-# Resource blocks define infrastructure components, can be physical or virtual (docker container)
-# Requires two strings before the block: resource type ("docker_image"), and resource name ("nginx")
-# Used to create ID for docker image: docker_image.nginx
-# Can take arguments such as machine sizes, disk image names
-resource "docker_image" "nginx" {
-  name         = "nginx"
-  keep_locally = false
+resource "docker_image" "fastapi_image" {
+  name = "fastapi_image"
+  build {
+    context = "."
+    dockerfile = "Dockerfile"
+  }
 }
 
-# Sets docker image as the image source for "docker_container" resource
-resource "docker_container" "nginx" {
-  image = docker_image.nginx.image_id
-  # searches for anything prepended with 'var.' in the variables.tf file
-  name  = var.container_name
-  hostname = "terraform-docker"
+# Resource blocks define infrastructure components, can be physical or virtual (docker container)
+# Requires two strings before the block: resource type ("docker_image"), and resource name ("nginx")
+# Used to create ID for docker image: docker_container.fastapi
+# Can take arguments such as machine sizes, disk image names
+resource "docker_container" "fastapi" {
+  image = docker_image.fastapi_image.image_id
+  name  = "fastapi_container"
 
   # Docker configuration values
   ports {
-    internal = 80
-    external = 8080
+    internal = 8000
+    external = 8000
   }
 }
