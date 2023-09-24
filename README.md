@@ -27,36 +27,36 @@ This project requires Docker and Terraform.
 ### To Complete Tutorial
 ___
 1. The first step to complete the tutorial is to complete the `Dockerfile`
-   2. To test that you completed `Dockerfile` correctly, ensure you are in the `tutorial` directory and run `docker build -t myimage .` This should build a Docker image called `myimage`, which you can confirm by running `docker image ls`. Remove this image by running `docker image prune`.
-3. Next, move to `main.tf`. Complete the two `resource` blocks for `docker_image` and `docker_container`. 
-   4. You will need to simultaneously modify `variables.tf` to declare any values that are prepended with `vars.` or else terraform will get mad at you because the value doesn't exist.
-5. Finally, move to `outputs.tf`. Following the comments, create an `output` that catches the `container_name` that you specified in `variables.tf`
+   1. To test that you completed `Dockerfile` correctly, ensure you are in the `tutorial` directory and run `docker build -t myimage .` This should build a Docker image called `myimage`, which you can confirm by running `docker image ls`. Remove this image by running `docker image prune`.
+2. Next, move to `main.tf`. Complete the two `resource` blocks for `docker_image` and `docker_container`. 
+   1. You will need to simultaneously modify `variables.tf` to declare any values that are prepended with `vars.` or else terraform will get mad at you because the value doesn't exist.
+3. Finally, move to `outputs.tf`. Following the comments, create an `output` that catches the `container_name` that you specified in `variables.tf`
 
 ### To run your code
 ___
 1. When your code is error-free and you think it's ready to run, ensure you are in `tutorial` and run `terraform init`
-   2. This will create a folder `.terraform.lock.hcl` that holds information on your `required_providers`
-3. Run `terraform plan`. This will output a lot of information to your terminal, basically outlining all the changes terraform is going to make.
-   4. NOTE: If this step fails with a warning that it can't connect to docker, go back to `main.tf` and specify the path to your `docker.sock` in the `provider "docker"` section.
-4. Run `terraform apply` and enter `yes` when prompted so terraform will try to create your resources. 
-   5. If this is successful, you should get an output block displaying the values you specified in `outputs.tf`
-   6. If you want to specify values for the variables you define in `variables.tf`, you'll need to do so on the command line. That entire command will look like 
-   7. ```
+   1. This will create a folder `.terraform.lock.hcl` that holds information on your `required_providers`
+2. Run `terraform plan`. This will output a lot of information to your terminal, basically outlining all the changes terraform is going to make.
+   1. NOTE: If this step fails with a warning that it can't connect to docker, go back to `main.tf` and specify the path to your `docker.sock` in the `provider "docker"` section.
+3. Run `terraform apply` and enter `yes` when prompted so terraform will try to create your resources. 
+   1. If this is successful, you should get an output block displaying the values you specified in `outputs.tf`
+   2. If you want to specify values for the variables you define in `variables.tf`, you'll need to do so on the command line. That entire command will look like 
+      ```
       terraform apply -var="container_name=[some_name]" -var="image_name=[some_name]"
       ```
-7. You can confirm that your code worked in a couple ways
-   8. On the command line, run `docker ps -a`. This will list all running containers. You should see your container running.
-   9. In your web browser, navigate to `localhost:[PORT]` where you replace `[PORT]` with the port number you specified in `main.tf`. You should see the output `{"Hello":"World"}`
-10. Tear everything down by running `terraform destroy` and entering `yes` when prompted.
+4. You can confirm that your code worked in a couple ways
+   1. On the command line, run `docker ps -a`. This will list all running containers. You should see your container running.
+   2. In your web browser, navigate to `localhost:[PORT]` where you replace `[PORT]` with the port number you specified in `main.tf`. You should see the output `{"Hello":"World"}`
+5. Tear everything down by running `terraform destroy` and entering `yes` when prompted.
 
 ### What to submit
 ___
 To demonstrate that you successfully completed the tutorial, submit a few screenshots to Alejandro.
 1. In your web browser, navigate to `localhost:[PORT]/docs`, again replacing `[PORT]` with your specified port number. Take a screenshot of the API docs that appear.
-   2. Hint: If you didn't modify `app/main.py`, you should have two endpoints: `Read Root` and `Read Item`.
-3. From the command line, take a screenshot of the `terraform apply` command you ran, including any variables you passed in.
-4. Also screenshot the `Outputs` section that is printed at the end of the `apply` output.
-   5. Hint: this should look something like:
+   1. Hint: If you didn't modify `app/main.py`, you should have two endpoints: `Read Root` and `Read Item`.
+2. From the command line, take a screenshot of the `terraform apply` command you ran, including any variables you passed in.
+3. Also screenshot the `Outputs` section that is printed at the end of the `apply` output.
+   1. Hint: this should look something like:
    ```
       Outputs:
 
@@ -65,4 +65,6 @@ To demonstrate that you successfully completed the tutorial, submit a few screen
    ```
 
 
-
+### Resources to create this tutorial
+___
+This tutorial leverages the [FastAPI docs](https://fastapi.tiangolo.com/deployment/docker/) for creating a FastAPI Docker container, and the Terraform docs for [building docker containers](https://developer.hashicorp.com/terraform/tutorials/docker-get-started) and [building docker images](https://registry.terraform.io/providers/kreuzwerker/docker/latest/docs/resources/image).
