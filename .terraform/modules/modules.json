@@ -1,1 +1,0 @@
-{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"gce-worker-container","Source":"./gce-with-container","Dir":"gce-with-container"},{"Key":"gce-worker-container.gce-container","Source":"registry.terraform.io/terraform-google-modules/container-vm/google","Version":"2.0.0","Dir":".terraform/modules/gce-worker-container.gce-container"}]}
